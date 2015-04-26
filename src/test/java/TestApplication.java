@@ -11,18 +11,17 @@ public class TestApplication extends Application<TestConfiguration> {
     }
 
     @Override
-    public void initialize(Bootstrap<TestConfiguration> bootstrap) {
-        DefaultSwaggerView defaultSwaggerView = new DefaultSwaggerView();
+    public void initialize(final Bootstrap<TestConfiguration> bootstrap) {
+        final DefaultSwaggerView defaultSwaggerView = new DefaultSwaggerView();
         defaultSwaggerView.setTitle("Test UI");
-        defaultSwaggerView.setDisplayApiSelector(false);
 
         bootstrap.addBundle(new SwaggerBundle(defaultSwaggerView));
 
-//        bootstrap.addBundle(new SwaggerBundle(new TestSwaggerView("/index.mustache", "/assets/")));
+//        bootstrap.addBundle(new SwaggerBundle(new TestSwaggerView()));
     }
 
     @Override
-    public void run(TestConfiguration configuration, Environment environment) throws Exception {
-
+    public void run(final TestConfiguration configuration, final Environment environment) throws Exception {
+        environment.jersey().register(new TestResource());
     }
 }
