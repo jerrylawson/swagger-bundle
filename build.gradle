@@ -1,0 +1,24 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    String dropwizardVersion = '0.7.1'
+    String swaggerVersion = '1.3.12'
+    String testNgVersion = '6.+'
+
+    compile group: 'io.dropwizard', name: 'dropwizard-core', version: dropwizardVersion
+    compile group: 'io.dropwizard', name: 'dropwizard-views', version: dropwizardVersion
+    compile group: 'io.dropwizard', name: 'dropwizard-views-mustache', version: dropwizardVersion
+    compile group: 'com.wordnik', name: 'swagger-jaxrs_2.10', version: swaggerVersion
+    compile 'com.bazaarvoice.dropwizard:dropwizard-configurable-assets-bundle:0.2.2'
+
+    compile 'org.projectlombok:lombok:0.11.6'
+
+    testCompile group: 'org.testng', name: 'testng', version: testNgVersion
+}
