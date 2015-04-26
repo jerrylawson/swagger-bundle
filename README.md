@@ -137,6 +137,7 @@ public class TestApplication extends Application<TestConfiguration> {
 
     @Override
     public void run(final TestConfiguration configuration, final Environment environment) throws Exception {
+      environment.jersey().register(new TestResource());
     }
 ```
 
