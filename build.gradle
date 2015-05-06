@@ -1,10 +1,19 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.7
 
 group = 'com.alexeinunez.dropwizard'
 version = '0.0.1'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
 
 repositories {
     mavenCentral()

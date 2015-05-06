@@ -16,6 +16,9 @@
 
 package com.alexeinunez.dropwizard.swagger;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 /**
  * A {@link com.alexeinunez.dropwizard.swagger.SwaggerView} which renders a
  * <a href="https://github.com/swagger-api/swagger-spec">Swagger Spec</a> using the
@@ -24,6 +27,8 @@ package com.alexeinunez.dropwizard.swagger;
  *
  * @author Alexei Nunez
  */
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class DefaultSwaggerView extends SwaggerView {
 
     private boolean displayApiSelector = true;
@@ -39,38 +44,10 @@ public class DefaultSwaggerView extends SwaggerView {
     /**
      * Define a Swagger Spec to render.
      *
-     * @param url a fully qualified URL of a Swagger Spec to be displayed
+     * @param swaggerSpecUrl a fully qualified URL of a Swagger Spec to be displayed
      */
-    public DefaultSwaggerView(final String url) {
-        super("index.mustache", "/default-swagger-ui", url);
-    }
-
-    /**
-     * @return true if, and only if, the ApiSelector is being displayed
-     */
-    public boolean isDisplayApiSelector() {
-        return displayApiSelector;
-    }
-
-    /**
-     * @param displayApiSelector true if the API selector should be displayed
-     */
-    public void setDisplayApiSelector(final boolean displayApiSelector) {
-        this.displayApiSelector = displayApiSelector;
-    }
-
-    /**
-     * @return the title of the rendered page
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * @param title the title the rendered page will display
-     */
-    public void setTitle(final String title) {
-        this.title = title;
+    public DefaultSwaggerView(final String swaggerSpecUrl) {
+        super("/templates/index.mustache", "default-swagger-ui", swaggerSpecUrl);
     }
 
 }

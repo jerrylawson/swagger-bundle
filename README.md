@@ -72,7 +72,7 @@ public class TestResource {
     @Path("/{message}")
     @ApiOperation(
            value = "get a model",
-            response = TestModel.class
+           response = TestModel.class
     )
     public TestModel getModel(
             @ApiParam(value = "Specify a message")
@@ -94,6 +94,7 @@ public class TestApplication extends Application<TestConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<TestConfiguration> bootstrap) {
+        bootstrap.addBundle(new ViewBundle());
         bootstrap.addBundle(new SwaggerBundle());
     }
 
@@ -131,7 +132,8 @@ public class TestApplication extends Application<TestConfiguration> {
       defaultSwaggerView.setTitle("Test UI");
       defaultSwaggerView.setDisplayApiSelector(false);
       // defaultSwaggerView.setUrl("http://petstore.swagger.io/v2/swagger.json")
-
+      
+      bootstrap.addBundle(new ViewBundle());
       bootstrap.addBundle(new SwaggerBundle(defaultSwaggerView));
     }
 
@@ -155,7 +157,7 @@ This bundle uses [Mustache templates](https://mustache.github.io/) for displayin
     </head>
     <body>
         <!--Values specified in SwaggerView by default-->
-        <p>{{url}}</p>
+        <p>{{swaggerSpecUrl}}</p>
         <p>{{assetsPath}}</p>
     </body>
 </html>
@@ -184,6 +186,7 @@ public class TestApplication extends Application<TestConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<TestConfiguration> bootstrap) {
+        bootstrap.addBundle(new ViewBundle());
         bootstrap.addBundle(new SwaggerBundle(new TestSwaggerView()));
     }
 

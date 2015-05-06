@@ -19,24 +19,26 @@ package com.alexeinunez.dropwizard.swagger;
 import com.google.common.base.Charsets;
 import com.google.common.base.Preconditions;
 import io.dropwizard.views.View;
+import lombok.Data;
 
 /**
  * The base class a view must implement for use with the {@link com.alexeinunez.dropwizard.swagger.SwaggerBundle}.
  */
+@Data
 public abstract class SwaggerView extends View {
 
     private String assetsPath;
-    private String url;
+    private String swaggerSpecUrl;
 
     /**
      * Creates a new view. The mustache template used to render this view has available all of the public "get" methods
      * in this class. Defaults assetPath to "/assets/".
      *
      * @param template the mustache template to render the view with
-     * @param url the URL used to obtain a Swagger Spec
+     * @param swaggerSpecUrl the URL used to obtain a Swagger Spec
      */
-    protected SwaggerView(final String template, final String url) {
-        this(template, "", url);
+    protected SwaggerView(final String template, final String swaggerSpecUrl) {
+        this(template, "", swaggerSpecUrl);
     }
 
     /**
@@ -46,34 +48,16 @@ public abstract class SwaggerView extends View {
      * @param template the mustache template to render the view with
      * @param assetsPath the location of the assets, relative to the application's assets directory, to be used
      *                         by the rendered view
-     * @param url the URL used to obtain a Swagger Spec
+     * @param swaggerSpecUrl the URL used to obtain a Swagger Spec
      */
-    protected SwaggerView(final String template, final String assetsPath, final String url) {
+    protected SwaggerView(final String template, final String assetsPath, final String swaggerSpecUrl) {
         super(template, Charsets.UTF_8);
 
         Preconditions.checkNotNull(assetsPath, "An asset path must be defined");
-        Preconditions.checkNotNull(url, "A URL must be defined");
+        Preconditions.checkNotNull(swaggerSpecUrl, "A URL must be defined");
 
         this.assetsPath = SwaggerBundle.ROOT_ASSETS_PATH + assetsPath;
-        this.url = url;
-    }
-
-    public String getAssetsPath() {
-        return assetsPath;
-    }
-
-    public void setAssetsPath(final String assetsPath) {
-        Preconditions.checkNotNull(assetsPath, "An asset path must be defined");
-        this.assetsPath = assetsPath;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(final String url) {
-        Preconditions.checkNotNull(url, "A URL must be defined");
-        this.url = url;
+        this.swaggerSpecUrl = swaggerSpecUrl;
     }
 
 }

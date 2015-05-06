@@ -29,7 +29,6 @@ import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.dropwizard.views.ViewBundle;
 import lombok.Getter;
 
 /**
@@ -39,16 +38,16 @@ import lombok.Getter;
  * a view is exposed for displaying the Swagger Spec with
  * <a href="https://github.com/swagger-api/swagger-ui">Swagger UI</a>, a UI able to interact with any API exposing
  * a Swagger Spec.
- *
+ * <p/>
  * <p>
  * The Swagger Spec endpoint is "/api-docs" and the Swagger UI endpoing is "/swagger".
  * </p>
  */
+@Getter
 public class SwaggerBundle<T extends Configuration & SwaggerBundleConfiguration> implements ConfiguredBundle<T> {
 
     public static final String ROOT_ASSETS_PATH = "/assets/";
 
-    @Getter
     private final SwaggerView view;
 
     /**
@@ -67,19 +66,23 @@ public class SwaggerBundle<T extends Configuration & SwaggerBundleConfiguration>
 
     @Override
     public void initialize(final Bootstrap<?> bootstrap) {
-        bootstrap.addBundle(new ViewBundle());
+        // ViewBundle should have been already added
         //noinspection unchecked
         bootstrap.addBundle((ConfiguredBundle) new ConfiguredAssetsBundle(ROOT_ASSETS_PATH));
     }
 
     @Override
-    public void run(final T configuration, final Environment environment) throws Exception {
+    public void run(final T configuration, final Environment environment)
+            throws Exception {
 
         environment.jersey().register(new SwaggerResource(view));
+
+        // adds the /api-docs resource
         environment.jersey().register(new ApiListingResourceJSON());
         environment.jersey().register(new ApiDeclarationProvider());
         environment.jersey().register(new ResourceListingProvider());
 
+        // set the configuration received from YAML configuration
         ConfigFactory.setConfig(configuration.getSwaggerConfiguration());
 
         ScannerFactory.setScanner(new DefaultJaxrsScanner());
