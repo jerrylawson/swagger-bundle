@@ -1,19 +1,10 @@
 apply plugin: 'java'
 apply plugin: 'maven'
-apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
-sourceCompatibility = 1.7
-
-group = 'com.alexeinunez.dropwizard'
+group = 'com.alexeinunez'
+archivesBaseName = "swagger-bundle"
 version = '0.0.1'
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-}
 
 repositories {
     mavenCentral()
@@ -29,8 +20,70 @@ dependencies {
     compile group: 'io.dropwizard', name: 'dropwizard-views-mustache', version: dropwizardVersion
     compile group: 'com.wordnik', name: 'swagger-jaxrs_2.10', version: swaggerVersion
     compile 'com.bazaarvoice.dropwizard:dropwizard-configurable-assets-bundle:0.2.2'
-
     compile 'org.projectlombok:lombok:0.11.6'
 
     testCompile group: 'org.testng', name: 'testng', version: testNgVersion
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUserName, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUserName, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'swagger-bundle'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'Dropwizard Bundle for easy integration with Swagger'
+                url 'https://github.com/arnm/swagger-bundle'
+
+                scm {
+                    connection 'scm:git:https://github.com/arnm/swagger-bundle.git'
+                    developerConnection 'scm:git:https://github.com/arnm/swagger-bundle.git'
+                    url 'https://github.com/arnm/swagger-bundle'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'arnm'
+                        name 'Alexei Nunez'
+                        email 'alexeirnunez@gmail.com'
+                    }
+                }
+            }
+        }
+    }
 }
